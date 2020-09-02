@@ -95,30 +95,37 @@
 <script>
 
 $(document).ready(function(){
+  //variables for dom manipulation 
+  const $eventContainer = $(".time-block");
+  const $saveBtn = $('.saveBtn');
+  const $textArea = $('.description');
+  const $currentDay = $('#currentDay').append(moment().format('LLLL'));
+  const textSchedule = null;
 
-const $saveBtn = $('.container');
-const $textArea = $('.description');
-const $currentDay = $('#currentDay');
+  //click listener on buttons
+  $eventContainer.each( (index) => {
+    // console.log( index + ": " + $( this ).text() );
+    $eventContainer.on("click", function (e) {
+      e.stopImmediatePropagation()
+      if (e.target.matches('.saveBtn')) {
+        console.log(e.target);
+        //add code to store to local storage here 
+      }
+    })
 
-$currentDay.append(moment().format('LLLL'));
-
-$saveBtn.on('click', function (e){
-  e.preventDefault();
-  let txt = $textArea.val();
-  
-
-  console.log(txt); 
-  console.log(moment().format());
-
-})
-
-
-
-
-
+  }); 
 
 
-})
+  //input listener on keystrokes
+  $('.description').on('input',(e)=>{
+    let textSchedule = e.target.value;
+    console.log(textSchedule);
+        return textSchedule;
+    
+  })
+console.log(textSchedule + "thisis laskdjsd ");
+
+});
 
 
 
