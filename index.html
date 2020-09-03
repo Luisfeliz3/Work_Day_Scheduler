@@ -35,7 +35,7 @@
       <div class="col-md-1 hour">
         10AM
       </div>
-      <textarea class="col-md-10 description"></textarea>
+      <textarea class="col-md-10 description">adsdas</textarea>
       <button class="btn saveBtn col-md-1">SAVE</button>
     </div>
     <div id="hour-11" class="row time-block past">
@@ -100,30 +100,48 @@ $(document).ready(function(){
   const $saveBtn = $('.saveBtn');
   const $textArea = $('.description');
   const $currentDay = $('#currentDay').append(moment().format('LLLL'));
-  const textSchedule = null;
+  const $hour = $('.hour');
 
-  //click listener on buttons
-  $eventContainer.each( (index) => {
-    // console.log( index + ": " + $( this ).text() );
-    $eventContainer.on("click", function (e) {
-      e.stopImmediatePropagation()
-      if (e.target.matches('.saveBtn')) {
-        console.log(e.target);
-        //add code to store to local storage here 
+  const currentHour =parseInt(moment().format("hh"));
+
+console.log(currentHour + "  <<<<-------The current hour indicator");
+
+let schedule = JSON.parse(window.localStorage.getItem("Schedule")) || [];
+slotsScheduled = Object.length; //represents scheduled slots 
+console.log('====================================');
+console.log(slotsScheduled + "   <<<<-------The Length of scheduled slots saved on Local Storage");
+console.log('====================================');
+console.log(schedule.time);
+console.log($hour.html());
+
+//  for loop to read property
+let id =schedule.id;
+let time = parseInt(schedule.time);
+console.log(time,currentHour);
+  for (let index = 0; index < slotsScheduled; index++) {
+  
+    $(id).find('textarea').text(schedule.text);
+
+      if(time <= currentHour){
+        $(id).addClass('past')
       }
-    })
+      if(time => currentHour){
+        $(id).addClass('future')
+      }
+      else if (time === currentHour){
+        $(id).addClass('present')
+      }    
 
-  }); 
+
+    }
 
 
-  //input listener on keystrokes
-  $('.description').on('input',(e)=>{
-    let textSchedule = e.target.value;
-    console.log(textSchedule);
-        return textSchedule;
-    
-  })
-console.log(textSchedule + "thisis laskdjsd ");
+
+
+
+
+ 
+
 
 });
 
