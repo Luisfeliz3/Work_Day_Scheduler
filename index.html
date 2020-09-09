@@ -87,78 +87,68 @@
       <textarea class="col-md-10 description"></textarea>
       <button class="btn saveBtn col-md-1">SAVE</button>
     </div>
-
-
-
   </div>
   </div>
   <script>
 
     $(document).ready(function () {
-      //variables for dom manipulation 
-      const $eventContainer = $(".time-block");
-      const $saveBtn = $('.saveBtn');
-      const $textArea = $('.description');
-      const $currentDay = $('#currentDay').append(moment().format('LLLL'));
-      const $hour = $('.hour');
-      const currentHour = moment().format("hh");
-      let id = '';
-
-      console.log(currentHour + "  <<<<-------The current hour indicator");
-
-      let scheduled = JSON.parse(window.localStorage.getItem("Scheduler")) || [];
-      slotsScheduled = scheduled.length; //represents scheduled slots 
-      console.log('====================================');
-      console.log(scheduled.length) + "<<<<-------The Length of scheduled slots saved on Local Storage";
-      console.log('====================================');
-      console.log($hour.html())
-      //scheduled[8]
+        const $currentDay = $('#currentDay').append(moment().format('LLLL'));
+        const scheduled = JSON.parse(window.localStorage.getItem("Scheduler")) || [];
+        const $saveButton = $('.saveBtn');
+        const $textarea = $('textarea');
+        const $description  = $('.description');
+        const $div = $('div')
+        const currentHour = moment().format('hA');
+        // let id = '';
+        
 
 
-      for (let i = 0; i < scheduled.length; i++) {
-        //Retrieves Object from Locale storage
-        console.log(scheduled.length);
-
-        let hr = scheduled[i].hourString;
-        let txt = scheduled[i].text;
-        let ind = scheduled[i].index;
-        let schedd = scheduled[i].id;
-        console.log(hr, txt, ind, schedd);
-        console.log(schedd);
-
-        $("#" + schedd + " .description").append("*" + txt);
-
-      }
-
-      function saveSchedule(hourString, text, index, id) {
-        console.log(index + "You Are in ---start---the save schedule function");
-        let newSchedule = {
-          hourString: this.hourString.trim(),
-          text: this.text.trim(),
-          index: this.index,
-          id: id
+        for (let i = 0; i < scheduled.length; i++) {
+          //Retrieves Object from Locale storage
+          let hr = scheduled[i].hourString.slice(0, 1)
+          let txt = scheduled[i].text;
+          let ind = scheduled[i].index;
+          let id = scheduled[i].id;
+          //Why can I not use the defined variable on line 98 for .description ?
+          //could I have written this better ? 
+          //could I Have used this on these statements ? 
+          $("#" + id + " .description").append(txt);
+          //Create more logic here text area
+          hr = moment().format(hr + 'A')
+          if (currentHour < hr) {
+            $("#" + id + " .description").addClass('past')
+          }
+          else if (currentHour === hr) {
+            $("#" + id + " .description").addClass('present')
+          }
+          else if (currentHour > hr) {
+            $("#" + id + " .description").addClass('future')
+          }
         }
 
-        scheduled.push(newSchedule);
-
-
-        window.localStorage.setItem("Scheduler", JSON.stringify(scheduled));
-        console.log("You are in the--- END ---of schedule function");
-      }
-
-      $(".saveBtn").click(function (e) {
-        if (e.target === e.currentTarget) {
-          index = $(this).index('.saveBtn');
-          text = $(this).siblings("textarea").val();
-          hourString = $(this).siblings("div").text();
-          id = e.target.parentNode.id;
-          console.log(index + " < --Index" + hourString + "< _--houhyr   " + id + "<= id");
-          saveSchedule(hourString, text, index, id)
+        function saveSchedule(hourString, text, index, id) {
+          let newSchedule = {
+            hourString: this.hourString.trim(),
+            text: this.text.trim(),
+            index: this.index,
+            id: id
+          }
+          scheduled.push(newSchedule);
+          window.localStorage.setItem("Scheduler", JSON.stringify(scheduled));
         }
-
-      })
-
-    });
+          //can the e be used as a this in here 
+        $saveButton.click(function (e) {
+          if ($(this).target === $(this).currentTarget) {
+            index = $(this).index($saveButton);
+            //Why when I use the defined VAriable on line 97 $textarea  does not work ?
+            text = $(this).siblings('textarea').val();
+            hourString = $(this).siblings($div).text();
+            //why can I not use the .this here ? when I have used them above no prob
+            id = e.target.parentNode.id;
+            saveSchedule(hourString, text, index, id)
+          }
+        })
+      });
 
 
 
